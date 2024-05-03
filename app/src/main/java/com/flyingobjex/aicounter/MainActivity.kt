@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.flyingobjex.aicounter.ui.theme.AiCounterTheme
+import com.flyingobjex.shared.AiCounterRepository
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,14 +35,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
 
-//    val repo = AiCounterRepository()
+    val repo = AiCounterRepository()
 
     Column(modifier = Modifier) {
         Text(
             text = "Hello there $name!",
             modifier = modifier
         )
-        Text(text = "Hello from shared Repo!")
+        Text(text = "Shared ==> ${repo.hello()}")
     }
 }
 
