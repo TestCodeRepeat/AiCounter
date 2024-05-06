@@ -22,19 +22,25 @@ kotlin {
             }
         }
     }
-    listOf(
-        iosX64(),
+    val iosTargets = listOf(
+//        iosX64(),
         iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
+//        iosSimulatorArm64()
+    )
+    iosTargets.forEach {
         it.binaries.framework {
             baseName = "shared"
             isStatic = true
-//            freeCompilerArgs += "-Xembed-bitcode"
         }
     }
 
     sourceSets {
+        iosTargets.forEach { target ->
+            val targetMain = this.getByName("${target.name}Main")
+            targetMain.dependencies {
+
+            }
+        }
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
         }

@@ -14,25 +14,31 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.flyingobjex.aicounter.ui.theme.AiCounterTheme
-import com.flyingobjex.shared.AiCounterRepository
+import com.flyingobjex.shared.presentation.AiCounterAction
+import com.flyingobjex.shared.presentation.AiCounterAction.PostMessage
+import com.flyingobjex.shared.presentation.AiCounterAction.Increment
+import com.flyingobjex.shared.presentation.AiCounterState
 import com.flyingobjex.shared.presentation.AiCounterStore
 
 
 class MainActivity : ComponentActivity() {
 
-    val repo = AiCounterRepository()
     val store = AiCounterStore()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
+            val state = store.observeState().collectAsState()
+
             AiCounterTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
+                    RootContentView(
                         name = "Android",
                         modifier = Modifier.padding(innerPadding),
-                        repo = repo
+                        state = state.value,
+                        dispatch = store::dispatch,
                     )
                 }
             }
@@ -41,29 +47,38 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(
+fun RootContentView(
     name: String,
     modifier: Modifier = Modifier,
-    repo: AiCounterRepository,
-    store: AiCounterStore = AiCounterStore()
+    state: AiCounterState,
+    dispatch: (AiCounterAction) -> Unit,
 ) {
-
-    val counterState = repo.counter.collectAsState()
-    val messageState = repo.messageFlow.collectAsState()
-
-    val state = store.observeState().collectAsState()
-
     Column(modifier = Modifier) {
         Text(
             text = "Hello there $name!",
             modifier = modifier
         )
-        Text(text = "Shared messageState.value ==> ${messageState.value}")
-        Text(text = "Shared counterState.value ==> ${counterState.value}")
+        Text(text = "Shared messageState.value ==> ${state.message}")
+        Text(text = "Shared counterState.value ==> ${state.count}")
 
-        Button(onClick = { repo.hello() }) {
-            println("onClick clicked")
+        Button(onClick = {
+            dispatch(Increment)
+        }) {
             Text(text = "Increment")
+        }
+
+        Button(onClick = {
+            dispatch(PostMessage("Post Message Clicked"))
+        }) {
+            Text(text = "Post Message")
+        }
+
+        Button(onClick = {
+            dispatch(AiCounterAction.IncrementWithOnComplete("Post Message Clicked") {
+                println("onComplete -- navigationPlaceholder() ")
+            })
+        }) {
+            Text(text = "Post Message")
         }
     }
 }
