@@ -15,11 +15,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.flyingobjex.aicounter.ui.theme.AiCounterTheme
 import com.flyingobjex.shared.AiCounterRepository
+import com.flyingobjex.shared.presentation.AiCounterStore
 
 
 class MainActivity : ComponentActivity() {
 
     val repo = AiCounterRepository()
+    val store = AiCounterStore()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +41,17 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier, repo: AiCounterRepository) {
+fun Greeting(
+    name: String,
+    modifier: Modifier = Modifier,
+    repo: AiCounterRepository,
+    store: AiCounterStore = AiCounterStore()
+) {
 
     val counterState = repo.counter.collectAsState()
     val messageState = repo.messageFlow.collectAsState()
+
+    val state = store.observeState().collectAsState()
 
     Column(modifier = Modifier) {
         Text(
