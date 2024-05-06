@@ -7,15 +7,20 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.flyingobjex.aicounter.ui.theme.AiCounterTheme
 import com.flyingobjex.shared.AiCounterRepository
 
+
 class MainActivity : ComponentActivity() {
+
+    val repo = AiCounterRepository()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -24,7 +29,8 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         name = "Android",
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
+                        repo = repo
                     )
                 }
             }
@@ -33,23 +39,22 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun Greeting(name: String, modifier: Modifier = Modifier, repo: AiCounterRepository) {
 
-    val repo = AiCounterRepository()
+    val counterState = repo.counter.collectAsState()
+    val messageState = repo.messageFlow.collectAsState()
 
     Column(modifier = Modifier) {
         Text(
             text = "Hello there $name!",
             modifier = modifier
         )
-        Text(text = "Shared ==> ${repo.hello()}")
-    }
-}
+        Text(text = "Shared messageState.value ==> ${messageState.value}")
+        Text(text = "Shared counterState.value ==> ${counterState.value}")
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AiCounterTheme {
-        Greeting("Android")
+        Button(onClick = { repo.hello() }) {
+            println("onClick clicked")
+            Text(text = "Increment")
+        }
     }
 }
