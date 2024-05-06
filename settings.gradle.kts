@@ -1,3 +1,4 @@
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 pluginManagement {
     repositories {
         google {
@@ -7,6 +8,7 @@ pluginManagement {
                 includeGroupByRegex("androidx.*")
             }
         }
+        google()
         mavenCentral()
         gradlePluginPortal()
     }
@@ -19,6 +21,8 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Ai Counter"
+rootProject.name = "AiCounter"
 include(":app")
 include(":shared")
+
+

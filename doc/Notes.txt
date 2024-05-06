@@ -1,0 +1,35 @@
+
+pwd:
+/Users/objex/Developer/KMP/exercise/iosApp
+
+./gradlew :shared:packForXcode
+
+
+Xcode
+:::::: Run Scripts ::::::
+:: Notes
+- ensure Run Script is put above Compile Sources
+:: script ->
+echo "Current working directory:"
+pwd
+cd "$SRCROOT/../AiCounter"
+echo "Directory after cd:"
+pwd
+./gradlew sayHello
+./gradlew :shared:embedAndSignAppleFrameworkForXcode
+
+
+:::::: Framework Search Paths ::::::
+$(SRCROOT)/../AiCounter/shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)
+
+$(SRCROOT)/../AiCounter/shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)
+../AiCounter/shared/build/xcode-frameworks
+
+
+
+$(SRCROOT)/../AiCounter/shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)
+$(SRCROOT)/../AiCounter/shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)
+
+
+
+
