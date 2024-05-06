@@ -23,9 +23,9 @@ kotlin {
         }
     }
     val iosTargets = listOf(
-//        iosX64(),
+        iosX64(),
         iosArm64(),
-//        iosSimulatorArm64()
+        iosSimulatorArm64()
     )
     iosTargets.forEach {
         it.binaries.framework {
@@ -38,11 +38,15 @@ kotlin {
         iosTargets.forEach { target ->
             val targetMain = this.getByName("${target.name}Main")
             targetMain.dependencies {
-
+                implementation(libs.ktor.client.darwin)
             }
+        }
+        androidMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.ktor.client.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
