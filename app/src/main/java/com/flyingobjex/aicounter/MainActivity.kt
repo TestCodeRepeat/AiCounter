@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.flyingobjex.aicounter.ui.theme.AiCounterTheme
 import com.flyingobjex.shared.domain.event.EventBusImpl
@@ -43,8 +42,6 @@ class MainActivity : ComponentActivity(), CoroutineScope by MainScope() {
 
         enableEdgeToEdge()
         setContent {
-
-            val state = rootStore.counterStore.observeState().collectAsState()
 
             AiCounterTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->

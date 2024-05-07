@@ -1,6 +1,6 @@
 package com.flyingobjex.shared.presentation.aicounter
 
-import com.flyingobjex.shared.AiCounterRepository
+import com.flyingobjex.shared.domain.AiCounterRepository
 import com.flyingobjex.shared.domain.event.EventBus
 import com.flyingobjex.shared.domain.event.getFilteredEvents
 import com.flyingobjex.shared.presentation.State

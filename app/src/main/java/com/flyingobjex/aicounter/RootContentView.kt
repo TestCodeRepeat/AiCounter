@@ -32,7 +32,5 @@ fun RootContentView(
 
         Screen.Todo -> Text("TodoScreen")
     }
-
-
 }
 

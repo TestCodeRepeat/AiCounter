@@ -2,16 +2,11 @@ package com.flyingobjex.shared.presentation.aitodo
 
 import com.flyingobjex.shared.domain.event.EventBus
 import com.flyingobjex.shared.domain.event.getFilteredEvents
+import com.flyingobjex.shared.domain.model.AiTodo
 import com.flyingobjex.shared.presentation.State
 import com.flyingobjex.shared.presentation.Store
 import com.flyingobjex.shared.presentation.event.Event
 import kotlinx.coroutines.launch
-
-data class AiTodo(
-    val todoId: String,
-    val description: String,
-    val completed: Boolean,
-)
 
 data class AiTodoState(
     val todos: List<AiTodo> = emptyList()
