@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
@@ -11,8 +9,6 @@ tasks.register("sayHello") {
         println("Hello")
     }
 }
-
-
 
 kotlin {
     androidTarget {
