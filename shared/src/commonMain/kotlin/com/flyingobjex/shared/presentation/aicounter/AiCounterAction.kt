@@ -1,4 +1,6 @@
-package com.flyingobjex.shared.presentation
+package com.flyingobjex.shared.presentation.aicounter
+
+import com.flyingobjex.shared.presentation.Action
 
 sealed class AiCounterAction : Action {
     data object Increment : AiCounterAction()

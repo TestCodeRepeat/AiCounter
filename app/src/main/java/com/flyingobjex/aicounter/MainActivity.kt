@@ -4,41 +4,53 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.flyingobjex.aicounter.ui.theme.AiCounterTheme
-import com.flyingobjex.shared.presentation.AiCounterAction
-import com.flyingobjex.shared.presentation.AiCounterAction.PostMessage
-import com.flyingobjex.shared.presentation.AiCounterAction.Increment
-import com.flyingobjex.shared.presentation.AiCounterState
-import com.flyingobjex.shared.presentation.AiCounterStore
+import com.flyingobjex.shared.domain.event.EventBusImpl
+import com.flyingobjex.shared.domain.event.getFilteredEvents
+import com.flyingobjex.shared.presentation.aicounter.AiCounterStore
+import com.flyingobjex.shared.presentation.aitodo.AiTodoStore
+import com.flyingobjex.shared.presentation.event.Event
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
+data class RootStore(
+    val counterStore: AiCounterStore,
+    val todoStore: AiTodoStore,
+)
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), CoroutineScope by MainScope() {
 
-    val store = AiCounterStore()
+    val eventBus = EventBusImpl()
+    val rootStore = RootStore(
+        counterStore = AiCounterStore(eventBus),
+        todoStore = AiTodoStore(eventBus),
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        launch {
+            eventBus.getFilteredEvents<Event.ToastEvent>().collect { event ->
+                println("MainActivity.kt -- eventBus.getFilteredEvents<Event.ToastEvent>) ${event.message}")
+            }
+        }
+
         enableEdgeToEdge()
         setContent {
 
-            val state = store.observeState().collectAsState()
+            val state = rootStore.counterStore.observeState().collectAsState()
 
             AiCounterTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     RootContentView(
-                        name = "Android",
                         modifier = Modifier.padding(innerPadding),
-                        state = state.value,
-                        dispatch = store::dispatch,
+                        rootStore = rootStore,
                     )
                 }
             }
@@ -46,39 +58,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun RootContentView(
-    name: String,
-    modifier: Modifier = Modifier,
-    state: AiCounterState,
-    dispatch: (AiCounterAction) -> Unit,
-) {
-    Column(modifier = Modifier) {
-        Text(
-            text = "Hello there $name!",
-            modifier = modifier
-        )
-        Text(text = "Shared messageState.value ==> ${state.message}")
-        Text(text = "Shared counterState.value ==> ${state.count}")
-
-        Button(onClick = {
-            dispatch(Increment)
-        }) {
-            Text(text = "Increment")
-        }
-
-        Button(onClick = {
-            dispatch(PostMessage("Post Message Clicked"))
-        }) {
-            Text(text = "Post Message")
-        }
-
-        Button(onClick = {
-            dispatch(AiCounterAction.IncrementWithOnComplete("Post Message Clicked") {
-                println("onComplete -- navigationPlaceholder() ")
-            })
-        }) {
-            Text(text = "Post Message")
-        }
-    }
-}

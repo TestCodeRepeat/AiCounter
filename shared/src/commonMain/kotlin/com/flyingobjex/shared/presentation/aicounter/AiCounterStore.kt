@@ -1,13 +1,28 @@
-package com.flyingobjex.shared.presentation
+package com.flyingobjex.shared.presentation.aicounter
 
 import com.flyingobjex.shared.AiCounterRepository
+import com.flyingobjex.shared.domain.event.EventBus
+import com.flyingobjex.shared.domain.event.getFilteredEvents
+import com.flyingobjex.shared.presentation.State
+import com.flyingobjex.shared.presentation.Store
+import com.flyingobjex.shared.presentation.event.Event
 import kotlinx.coroutines.launch
 
 data class AiCounterState(val count: Int = 0, val message: String) : State
 
-class AiCounterStore : Store<AiCounterState, AiCounterAction, AiCounterEffect>() {
+class AiCounterStore(eventBus: EventBus) : Store<AiCounterState, AiCounterAction, AiCounterEffect>() {
 
     val repo = AiCounterRepository()
+
+    init {
+        launch {
+            eventBus.getFilteredEvents<Event.StoreAction>().collect { event ->
+                when(event.action){
+                    is AiCounterAction -> dispatch(event.action)
+                }
+            }
+        }
+    }
 
     override fun initState(): AiCounterState {
         return AiCounterState(0, "--")
@@ -24,13 +39,11 @@ class AiCounterStore : Store<AiCounterState, AiCounterAction, AiCounterEffect>()
     }
 
     private fun searchWeb(action: AiCounterAction.SearchWeb) {
-
-
+        TODO()
     }
 
     private suspend fun incrementAsync(action: AiCounterAction.IncrementWithOnComplete) {
         launch {
-
             updateState(state.copy(count = state.count + 1))
             action.onComplete()
         }
