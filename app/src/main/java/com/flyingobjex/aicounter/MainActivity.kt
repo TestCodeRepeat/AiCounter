@@ -40,6 +40,12 @@ class MainActivity : ComponentActivity(), CoroutineScope by MainScope() {
             }
         }
 
+        launch {
+            eventBus.getFilteredEvents<Event.StoreSideEffect>().collect { event ->
+                println("MainActivity.kt -- eventBus.getFilteredEvents<Event.ToastEvent>) ${event.action::class.simpleName}")
+            }
+        }
+
         enableEdgeToEdge()
         setContent {
 

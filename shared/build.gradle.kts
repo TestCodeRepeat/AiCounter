@@ -46,11 +46,16 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)
+//            implementation(libs.koin.annotations)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
     }
+}
+
+ksp {
+    arg("KOIN_CONFIG_CHECK","true")
 }
 
 android {
