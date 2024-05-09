@@ -25,8 +25,8 @@ data class RootStore(
 
 class MainActivity : ComponentActivity(), CoroutineScope by MainScope() {
 
-    val eventBus = EventBusImpl()
-    val rootStore = RootStore(
+    private val eventBus = EventBusImpl()
+    private val rootStore = RootStore(
         counterStore = AiCounterStore(eventBus),
         todoStore = AiTodoStore(eventBus),
     )

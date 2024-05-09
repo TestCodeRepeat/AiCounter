@@ -5,12 +5,6 @@ plugins {
     alias(libs.plugins.google.devtools.ksp)
 }
 
-tasks.register("sayHello") {
-    doLast {
-        println("Hello")
-    }
-}
-
 kotlin {
     androidTarget {
         compilations.all {
@@ -46,7 +40,6 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)
-//            implementation(libs.koin.annotations)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -67,5 +60,12 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+}
+
+
+tasks.register("sayHello") {
+    doLast {
+        println("Hello")
     }
 }
