@@ -14,6 +14,7 @@ import com.flyingobjex.shared.domain.event.getFilteredEvents
 import com.flyingobjex.shared.presentation.aicounter.AiCounterStore
 import com.flyingobjex.shared.presentation.aitodo.AiTodoStore
 import com.flyingobjex.shared.presentation.event.Event
+import io.sentry.Sentry
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -31,8 +32,17 @@ class MainActivity : ComponentActivity(), CoroutineScope by MainScope() {
         todoStore = AiTodoStore(eventBus),
     )
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        findViewById<android.view.View>(android.R.id.content).viewTreeObserver.addOnGlobalLayoutListener {
+            try {
+                throw Exception("This app uses Sentry! :)")
+            } catch (e: Exception) {
+                Sentry.captureException(e)
+            }
+        }
 
         launch {
             eventBus.getFilteredEvents<Event.ToastEvent>().collect { event ->
