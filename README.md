@@ -6,7 +6,8 @@ A Kotlin Multiplatform architecture example for introducing shared functionality
 existing Android & iOS projects. It is meant as a starting point for discussion on architecture
 and how to approach introducing new shared behavior and extracting shared behavior from existing native projects.
 
-In this example, we combine basic Todo and Counter functionality into a shared multiplatform module.
+In this example, we combine basic Todo and Counter functionality into a shared multiplatform module, and add this new
+module to an existing Android project.
 
 The shared module is exported as an XCFramework for existing native iOS github
 project, and integrated with an existing Android project as a standard gradle module.
@@ -36,6 +37,19 @@ This project consists of three main modules:
   Architecture [Swift Composable Architecture](https://github.com/pointfreeco/swift-composable-architecture)
 - Presentation layer is shared by both iOS & Android apps and lives in **:shared** module
 - manage application state in a single place
+
+### Presentation Layer Guidelines
+
+- should try to only pass primitives in Actions from Native UI
+    - e.g. `todoId:String`, `itemIndex:Int`, etc.  
+      `ToggleTodoAction(todoId: String)`
+      `IncrementCounterByAction(incrementBy: Int)`
+
+### Key Dependencies
+
+- [SKIE by Touchlab](https://skie.touchlab.co/intro#getting-started) for quality-of-life improvements
+    - "a Swift-friendly API Generator for Kotlin Multiplatform"
+    - extremely helpful for iOS interop
 
 ### Related documentation
 
